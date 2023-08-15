@@ -30,12 +30,34 @@ public class GameService {
         return gameRepository.findById(id).stream().map(gameDtoMapper).findAny();
     }
 
-    public Game saveGame(Game game){
-        return gameRepository.save(game);
+    public Game saveGame(GameDtoRequest game){
+        return gameRepository.save(new Game(
+            game.name(),
+            game.genre(),
+            game.releaseYear(),
+            game.score(),
+            game.developer()
+        ));
     }
 
     public void deleteGame(Long id){
         gameRepository.deleteById(id);
+    }
+
+    public Game updateGame(Long id, GameDtoRequest game) {
+        Optional<Game> gameToUpdate = gameRepository.findById(id);
+        if(gameToUpdate.isEmpty()){
+            return null;
+        }else{
+            return gameRepository.save(new Game(
+                id, 
+                game.name(), 
+                game.genre(), 
+                game.releaseYear(), 
+                game.score(), 
+                game.developer()
+                ));
+        }
     }
 
 

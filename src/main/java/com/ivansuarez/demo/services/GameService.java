@@ -16,11 +16,15 @@ import com.ivansuarez.demo.repositories.GameRepository;
 @Service
 public class GameService {
 
-	@Autowired
-	private GameRepository gameRepository;
+	
+    private final GameRepository gameRepository;
+    private final GameDtoMapper gameDtoMapper;
 
     @Autowired
-    private GameDtoMapper gameDtoMapper;
+    public GameService(GameRepository gameRepository, GameDtoMapper gameDtoMapper) {
+        this.gameRepository = gameRepository;
+        this.gameDtoMapper = gameDtoMapper;
+    }
 
     public List<GameDto> getAllGames(){
         return gameRepository.findAll().stream().map(gameDtoMapper).collect(Collectors.toList());

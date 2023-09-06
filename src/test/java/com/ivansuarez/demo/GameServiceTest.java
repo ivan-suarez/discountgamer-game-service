@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 
 import com.ivansuarez.demo.dto.GameDto;
 import com.ivansuarez.demo.dto.GameDtoMapper;
+import com.ivansuarez.demo.dto.GameDtoRequest;
 import com.ivansuarez.demo.model.Game;
 import com.ivansuarez.demo.repositories.GameRepository;
 import com.ivansuarez.demo.services.GameService;
@@ -71,15 +72,25 @@ public class GameServiceTest {
         assertEquals(expectedGameDto, actualGameDto);
     }
 
+    @Test
     public void getGameByIdWhenNotFoundAnyTest(){
-        Mockito.when(gameRepository.findById(1L)).thenReturn(Optional.of(null));
+        Mockito.when(gameRepository.findById(1L)).thenReturn(Optional.empty());
         Optional<GameDto> actualGameDto = gameService.getGameById(1L);
 
-        assertEquals(Optional.of(null), actualGameDto);
+        assertEquals(Optional.empty(), actualGameDto);
     }
 
+    //@Test
     public void saveGameTest(){
-        
+        Game game1 = new Game(
+            "Nier Automata", "RPG", 2017, 5, "Square Enix");
+        Game game2 = new Game(
+            1L, "Nier Automata", "RPG", 2017, 5, "Square Enix");
+        Mockito.when(gameRepository.save(game1)).thenReturn(game2);
+        GameDtoRequest gameDto = new GameDtoRequest(
+            "Nier Automata", "RPG", 2017, 5, "Square Enix");
+      //  Game actualGame = gameService.saveGame(gameDto);
+        //assertEquals(game2, actualGame);
     }
 
     public void updateGameTest(){

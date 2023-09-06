@@ -34,33 +34,35 @@ public class GameService {
         return gameRepository.findById(id).stream().map(gameDtoMapper).findAny();
     }
 
-    public Game saveGame(GameDtoRequest game){
-        return gameRepository.save(new Game(
-            game.name(),
-            game.genre(),
-            game.releaseYear(),
-            game.score(),
-            game.developer()
-        ));
+    public GameDto saveGame(GameDtoRequest gameDtoRequest){
+        Game game = new Game(
+            gameDtoRequest.name(),
+            gameDtoRequest.genre(),
+            gameDtoRequest.releaseYear(),
+            gameDtoRequest.score(),
+            gameDtoRequest.developer()
+        );
+        Game savedGame = gameRepository.save(game);
+        return gameDtoMapper.apply(savedGame);
     }
 
     public void deleteGame(Long id){
         gameRepository.deleteById(id);
     }
 
-    public Game updateGame(Long id, GameDtoRequest game) {
+    public Optional<GameDto> updateGame(Long id, GameDtoRequest gameDtoRequest) {
         Optional<Game> gameToUpdate = gameRepository.findById(id);
         if(gameToUpdate.isEmpty()){
-            return null;
+            return Optional.empty();
         }else{
-            return gameRepository.save(new Game(
-                id, 
-                game.name(), 
-                game.genre(), 
-                game.releaseYear(), 
-                game.score(), 
-                game.developer()
-                ));
+            Game updatedGame = gameToUpdate.get();
+            updatedGame.setName(gameDtoRequest.name());
+            updatedGame.setGenre(gameDtoRequest.genre());
+            updatedGame.setReleaseYear(gameDtoRequest.releaseYear());
+            updatedGame.setScore(gameDtoRequest.score());
+            updatedGame.setDeveloper(gameDtoRequest.developer());
+            gameRepository.save(updatedGame);
+            return Optional.of(gameDtoMapper.apply(updatedGame));
         }
     }
 

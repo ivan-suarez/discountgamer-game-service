@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ivansuarez.demo.dto.GameDto;
 import com.ivansuarez.demo.dto.GameDtoRequest;
-import com.ivansuarez.demo.model.Game;
 import com.ivansuarez.demo.services.GameService;
 
 @RestController
@@ -42,9 +41,9 @@ public class GameController{
     }
 
     @PutMapping(value = "/game/put/{id}")
-    public ResponseEntity<Game> updateGame(@PathVariable Long id, @RequestBody GameDtoRequest game){
-        Game g = gameService.updateGame(id, game);
-        return g != null ? ResponseEntity.ok(g) : ResponseEntity.notFound().build();
+    public ResponseEntity<GameDto> updateGame(@PathVariable Long id, @RequestBody GameDtoRequest game){
+        Optional<GameDto> g = gameService.updateGame(id, game);
+        return !g.isEmpty() ? ResponseEntity.ok(g.get()) : ResponseEntity.notFound().build();
     }
     
     @DeleteMapping(value = "/game/delete/{id}")

@@ -80,33 +80,55 @@ public class GameServiceTest {
         assertEquals(Optional.empty(), actualGameDto);
     }
 
-    //@Test
+    @Test
     public void saveGameTest(){
         Game game1 = new Game(
             "Nier Automata", "RPG", 2017, 5, "Square Enix");
         Game game2 = new Game(
             1L, "Nier Automata", "RPG", 2017, 5, "Square Enix");
         Mockito.when(gameRepository.save(game1)).thenReturn(game2);
+        GameDto expectedDto = new GameDto(
+            "Nier Automata",
+            "RPG",
+            2017,
+            5,
+            "Square Enix");
         GameDtoRequest gameDto = new GameDtoRequest(
             "Nier Automata", "RPG", 2017, 5, "Square Enix");
-      //  Game actualGame = gameService.saveGame(gameDto);
-        //assertEquals(game2, actualGame);
+        GameDto actualGame = gameService.saveGame(gameDto);
+        assertEquals(expectedDto, actualGame);
     }
 
+    @Test
     public void updateGameTest(){
-        
+        Game game1 = new Game(
+            1L,
+            "Nier Automata", "RPG", 2017, 5, "Square Enix");
+        Mockito.when(gameRepository.findById(1L)).thenReturn(Optional.of(game1));
+        GameDtoRequest gameDto = new GameDtoRequest(
+            "Nier Automata", "RPG", 2017, 4, "Square Enix");
+        Game game2 = new Game(
+                1L, "Nier Automata", "RPG", 2017, 4, "Square Enix");
+        Game game3 = new Game(
+                    1L, "Nier Automata", "RPG", 2017, 4, "Square Enix");
+        Mockito.when(gameRepository.save(game2)).thenReturn(game3);
+        Optional<GameDto> updatedGame = gameService.updateGame(1L, gameDto);
+        GameDto expectedDto = new GameDto(
+            "Nier Automata",
+            "RPG",
+            2017,
+            4,
+            "Square Enix");
+        assertEquals(expectedDto, updatedGame.get());
     }
 
+    @Test
     public void updateGameWhenNotFoundAnyTest(){
-        
-    }
-
-    public void deleteGameTest(){
-        
-    }
-
-    public void deleteGameWhenNotFoundAnyTest(){
-        
+        GameDtoRequest gameDto = new GameDtoRequest(
+            "Nier Automata", "RPG", 2017, 4, "Square Enix");
+        Mockito.when(gameRepository.findById(1L)).thenReturn(Optional.empty());
+        Optional<GameDto> updatedGame = gameService.updateGame(1L, gameDto);
+        assertEquals(Optional.empty(), updatedGame);
     }
 
 }

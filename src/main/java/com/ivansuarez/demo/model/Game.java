@@ -1,5 +1,7 @@
 package com.ivansuarez.demo.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -70,6 +72,24 @@ public class Game {
 	}
 	public void setDeveloper(String developer) {
 		this.developer = developer;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(developer, genre, id, name, releaseYear);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Game other = (Game) obj;
+		return Objects.equals(developer, other.developer) && Objects.equals(genre, other.genre)
+				&& Objects.equals(id, other.id) && Objects.equals(name, other.name) && releaseYear == other.releaseYear;
 	}
 
 }

@@ -2,8 +2,11 @@ package com.ivansuarez.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -16,6 +19,7 @@ public class SecurityConfig {
 
    @Bean 
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        http.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(auth ->
         auth.requestMatchers("/game/getAll").authenticated()
         .anyRequest().permitAll())
@@ -24,7 +28,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean 
+   /* @Bean 
     InMemoryUserDetailsManager inMemoryUserDetailsManager(){
         UserDetails admin = User.withUsername("admin")
         .password("admin")
@@ -36,9 +40,14 @@ public class SecurityConfig {
         .build();
         return new InMemoryUserDetailsManager(admin, user);
     }
-
+ */
     @Bean
     PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();
     }
+
+   @Bean
+   AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+        return configuration.getAuthenticationManager();
+   }
 }

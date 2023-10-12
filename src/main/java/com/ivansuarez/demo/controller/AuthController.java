@@ -1,5 +1,7 @@
 package com.ivansuarez.demo.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,6 +21,8 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUserDetailService jwtUserDetailService;
     private final JWTService jwtService;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     
 	public AuthController(AuthenticationManager authenticationManager, JwtUserDetailService jwtUserDetailService,
 			JWTService jwtService) {
@@ -30,12 +34,15 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> postToken(@RequestBody JWTRequest request) {
-        this.authenticate(request);
+
+        logger.debug("Authenticate endpoint");
+        return null;
+        /*this.authenticate(request);
 
         final var userDetails = this.jwtUserDetailService.loadUserByUsername(request.getUsername());
 
         final var token = this.jwtService.generateToken(userDetails);
-        return ResponseEntity.ok(new JWTResponse(token));
+        return ResponseEntity.ok(new JWTResponse(token));*/
     }
 
     private void authenticate(JWTRequest request) {

@@ -3,6 +3,8 @@ package com.ivansuarez.demo.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +26,8 @@ public class GameController{
     @Autowired
     private GameService gameService;
 
+    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+
     @GetMapping(value = "/game/getAll")
     @CrossOrigin(origins = "http://localhost:5173")
     public List<GameDto> getAllGames(){
@@ -32,6 +36,7 @@ public class GameController{
 
     @GetMapping(value = "/game/get/{id}")
     public ResponseEntity<GameDto> getGameByID(@PathVariable Long id){
+        logger.debug("game get endpoint");
         return gameService.getGameById(id)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());

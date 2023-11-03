@@ -19,16 +19,16 @@ public class SecurityConfig {
 
    @Bean 
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.csrf().disable().sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(auth ->
-        auth.requestMatchers("/game/getAll").authenticated()
+        auth
         .anyRequest().permitAll())
         .formLogin(Customizer.withDefaults())
         .httpBasic(Customizer.withDefaults());
         return http.build();
     }
 
-   /* @Bean 
+    @Bean 
     InMemoryUserDetailsManager inMemoryUserDetailsManager(){
         UserDetails admin = User.withUsername("admin")
         .password("admin")
@@ -40,14 +40,14 @@ public class SecurityConfig {
         .build();
         return new InMemoryUserDetailsManager(admin, user);
     }
- */
+ 
     @Bean
     PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();
     }
 
-   @Bean
+  /*  @Bean
    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
-   }
+   }*/
 }

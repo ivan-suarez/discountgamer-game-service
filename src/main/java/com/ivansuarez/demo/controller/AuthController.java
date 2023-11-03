@@ -36,13 +36,12 @@ public class AuthController {
     public ResponseEntity<?> postToken(@RequestBody JWTRequest request) {
 
         logger.debug("Authenticate endpoint");
-        return null;
-        /*this.authenticate(request);
-
+        this.authenticate(request);
+        //return null;
         final var userDetails = this.jwtUserDetailService.loadUserByUsername(request.getUsername());
 
         final var token = this.jwtService.generateToken(userDetails);
-        return ResponseEntity.ok(new JWTResponse(token));*/
+        return ResponseEntity.ok(new JWTResponse(token));
     }
 
     private void authenticate(JWTRequest request) {
